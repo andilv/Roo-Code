@@ -219,6 +219,7 @@ This section lists the key third-party libraries and frameworks used by Roo Code
 *   **`@mistralai/mistralai`**: SDK for interacting with Mistral AI models.
 *   **`openai`**: Official OpenAI SDK for models like GPT-3.5/4.
 *   **`@modelcontextprotocol/sdk`**: SDK for the Model Context Protocol, enabling extensible tool use.
+*   **`@qdrant/js-client-rest`**: Client for Qdrant vector database, likely used for code indexing and semantic search features.
 *   **`tiktoken`**: Used for counting tokens in text, essential for managing context windows with LLMs.
 *   **`axios`**: Promise-based HTTP client for making API requests.
 *   **`cheerio`**: Fast, flexible, and lean implementation of core jQuery designed specifically for the server, likely used for parsing HTML content (e.g., from web browsing tools).
