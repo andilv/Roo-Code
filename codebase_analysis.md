@@ -386,7 +386,6 @@ Relationships:
 *   **Workspace Services:** Modules for interacting with the user's workspace (reading/writing files, searching, respecting `.rooignore`).
 *   **Browser/Web Services:** Modules for automating browser actions or fetching content from URLs.
 *   **MCP Hub/Services:** Manages communication with external tools via the Model Context Protocol.
-
 ```
 
 ### Call or Data Flow Diagram
@@ -402,4 +401,33 @@ This diagram illustrates the sequence of events and data flow when a user types 
     |
     v
 3. [ClineProvider (`core/webview/ClineProvider.ts`)]
-   (Relays message to extension host,
+   (Relays message to extension host, may initiate a new `Task` or pass to existing one)
+    |
+    v
+4. [Task Object (`core/task/Task.ts`)]
+   (Processes input, manages history, prepares AI request)
+    |
+    v
+5. [ApiHandler (`src/api/index.ts` & `src/api/providers/`)]
+   (Formats request for the specific AI provider)
+    |
+    v
+6. [External LLM API (e.g., OpenAI, Anthropic)]
+   (AI model processes the request)
+    |
+    v
+7. [ApiHandler]
+   (Receives AI response, parses it)
+    |
+    v
+8. [Task Object (`core/task/Task.ts`)]
+   (Parses AI response: text, tool calls. If tool call: invokes tool, gets result, may loop back to step 4/5 with tool result. If text: proceeds to step 9)
+    |
+    v
+9. [ClineProvider (`core/webview/ClineProvider.ts`)]
+   (Receives processed response/result from Task)
+    |
+    v
+10. [Webview UI]
+    (Displays AI response/tool output to the user)
+```
