@@ -32,13 +32,13 @@ export const deregisterRunner = async ({ runId, taskId }: { runId: number; taskI
 
 export const startHeartbeat = async (runId: number, seconds: number = 10) => {
 	const pid = process.pid.toString()
-	const redis = await redisClient()
+	const localRedis = await redisClient()
 	const heartbeatKey = getHeartbeatKey(runId)
-	await redis.setEx(heartbeatKey, seconds, pid)
+	await localRedis.setEx(heartbeatKey, seconds, pid)
 
 	return setInterval(
 		() =>
-			redis.expire(heartbeatKey, seconds).catch((error) => {
+			localRedis.expire(heartbeatKey, seconds).catch((error) => {
 				console.error("heartbeat error:", error)
 			}),
 		(seconds * 1_000) / 2,
@@ -55,3 +55,11 @@ export const stopHeartbeat = async (runId: number, heartbeat: NodeJS.Timeout) =>
 		console.error("redis.del failed:", error)
 	}
 }
+
+// Export this only for testing purposes
+export const resetRedisClientForTest = () => {
+  if (process.env.NODE_ENV === 'test') {
+    // @ts-ignore TS assumes 'redis' is constant due to module scope
+    redis = undefined;
+  }
+};
